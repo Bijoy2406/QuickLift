@@ -87,9 +87,9 @@ QuickLift is a web-based ride-sharing platform that connects passengers with dri
 
 **Milestone 1: Initial Setup**
 
-- Initialize the backend with Node.js and Express framework.
+- Initialize the backend with Laravel.
 - Set up the frontend with React, including routing and basic UI components.
-- Set up MongoDB database for managing user and trip data.
+- Set up  database for managing user and trip data.
 
 **Milestone 2: Core Features Development**
 
