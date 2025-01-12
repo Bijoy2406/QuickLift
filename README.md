@@ -102,7 +102,6 @@ QuickLift is a web-based ride-sharing platform that connects passengers with dri
 
 - Complete payment integration for booking rides.
 - Test all features for functionality and user experience.
-- Deploy the backend on a cloud platform (e.g., Heroku or AWS).
-- Deploy the frontend on a platform like Netlify or Vercel.
+- Deploy the backend and frontend on a cloud platform .
 - Provide comprehensive documentation for users and developers.
 
