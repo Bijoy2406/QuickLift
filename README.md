@@ -1,66 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+**Team Member:**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+|**Id number**|**Name**|**Gmail**|**Role**|
+| :- | :- | :- | :- |
+|20220104157|Tajuddin Ahmed|bijoy.ahmed12555@gmail.com|Frontend|
+|20220104035|Adnan Shahriar Zihan|shakibalhasan08214@gmail.com|Backend|
+|20220104029|Farhan Labib|labibfarhan285@gmail.com|Lead|
 
-## About Laravel
+**Project Overview**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Project Title:**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+QuickLift
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Objective:**
 
-## Learning Laravel
+QuickLift is a web-based ride-sharing platform that connects passengers with drivers for efficient and convenient transportation. It offers a simple and intuitive interface for booking rides, managing driver profiles, tracking trips in real-time, and ensuring safety for both passengers and drivers.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Target Audience:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Passengers**: Individuals who need rides for commuting or travel.
+- **Drivers**: Individuals looking to earn money by providing rides.
+- **Admins**: Platform administrators who manage users, trips, and support.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Tech Stack:**
 
-## Laravel Sponsors
+- Backend: Laravel.
+- Frontend: React.
+- Rendering Method: Client-Side Rendering (CSR).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+**UI Design:**
 
-### Premium Partners
+- The platform provides a user-friendly and modern design optimized for both drivers and passengers.
+- UI wireframes have been created using Figma. View Mock UI Design
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+  Here is the mock Ui:
+  <https://www.figma.com/proto/Vamwe21bV0AiM5MHPnyMqK/QuickLift?node-id=0-1&t=v6OuGksi1rpXt6Kr-1>
+  This will update as the project progressed.
 
-## Contributing
+-----
+**Project Features:**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**User Management:**
 
-## Code of Conduct
+- **Passenger Registration**: Passengers can sign up, log in, and manage their profiles.
+- **Driver Registration**: Drivers can sign up with vehicle details and personal information.
+- **Admin Panel**: Admins can manage users, monitor trips, and perform administrative tasks.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Ride Booking:**
 
-## Security Vulnerabilities
+- **Ride Requests**: Passengers can specify their pickup and drop-off locations, view nearby available drivers, and book a ride.
+- **Real-Time Ride Tracking**: Track the ride in real-time with live updates for both passengers and drivers.
+- **Payment Integration**: Support for credit card payments and other online payment options.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Driver Management:**
 
-## License
+- **Availability Status**: Drivers can toggle their availability status to accept or reject ride requests.
+- **Ride History**: Drivers can view their completed trips, ratings, and earnings.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Trip Management:**
+
+- **Ride Confirmation**: Passengers can confirm the driver, and drivers can accept or decline ride requests.
+- **Route Optimization**: The app uses Google Maps API to suggest the fastest and most efficient routes.
+- **Ratings**: After each trip, passengers and drivers can rate their experience to ensure high-quality service.
+
+**User Authentication:**
+
+- Secure registration and login functionality with JWT-based authentication.
+- Password recovery and user profile management.
+
+**CRUD Operations:**
+
+- **Trips**: View, create, and manage trips.
+- **Users**: Manage user accounts and preferences.
+- **Driver Profiles**: Drivers can update vehicle details and availability.
+
+**API Endpoints:**
+
+- GET /users: Retrieve user details.
+- POST /users: Register a new user.
+- GET /drivers: Get a list of available drivers.
+- POST /drivers: Register a new driver.
+- GET /trips: Fetch trip history.
+- POST /trips: Create a new ride request.
+-----
+**Milestones:**
+
+**Milestone 1: Initial Setup**
+
+- Initialize the backend with Laravel.
+- Set up the frontend with React, including routing and basic UI components.
+- Set up  database for managing user and trip data.
+
+**Milestone 2: Core Features Development**
+
+- Implement user authentication and registration system.
+- Develop ride booking functionality with real-time tracking.
+- Implement driver management features (availability, trip history).
+- Integrate Google Maps API for route optimization.
+
+**Milestone 3: Final Touches and Deployment**
+
+- Complete payment integration for booking rides.
+- Test all features for functionality and user experience.
+- Deploy the backend and frontend on a cloud platform .
+- Provide comprehensive documentation for users and developers.
+
