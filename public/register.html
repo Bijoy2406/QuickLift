@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickLift - Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="form-container">
+            <h2>Create Your QuickLift Account</h2>
+            <form action="/register" method="POST">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="password_confirm">Confirm Password</label>
+                <input type="password" id="password_confirm" name="password_confirm" required>
+
+                <label for="role">Register as</label>
+                <select id="role" name="role" required>
+                    <option value="rider">Rider</option>
+                    <option value="user">User</option>
+                </select>
+
+
+                
+                <div id="rider-fields" style="display: none;">
+                    <label for="car_number">Car Number</label>
+                    <input type="text" id="car_number" name="car_number">
+
+                    <label for="car_details">Car Details</label>
+                    <input type="text" id="car_details" name="car_details">
+                </div>
+
+            
+                <div id="user-fields" style="display: none;">
+                    <label for="preferred_location">Preferred Location</label>
+                    <input type="text" id="preferred_location" name="preferred_location">
+                </div>
+
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+    </div>
+    <script>
+        
+        const roleSelect = document.getElementById('role');
+        const riderFields = document.getElementById('rider-fields');
+        const userFields = document.getElementById('user-fields');
+
+        
+        function toggleRoleFields() {
+            if (roleSelect.value === 'rider') {
+                riderFields.style.display = 'block';
+                userFields.style.display = 'none';
+            } else if (roleSelect.value === 'user') {
+                riderFields.style.display = 'none';
+                userFields.style.display = 'block';
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleRoleFields);
+
+       
+        toggleRoleFields();
+    </script>
+</body>
+</html>
+</body>
+</html>
