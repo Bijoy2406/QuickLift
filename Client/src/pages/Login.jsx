@@ -25,20 +25,22 @@ function Login() {
   };
 
   return (
-    <div className="form-container">
-      <h2>Login to QuickLift</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        
-        <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        
-        <button type="submit">Login</button>
-      </form>
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
+    <div className="main-content">
+      <div className="form-container">
+        <h2>Login to QuickLift</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+        <form onSubmit={handleSubmit}>
+          <label>Email</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          
+          <label>Password</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          
+          <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <Link to="/register">Register</Link></p>
+      </div>
     </div>
   );
 }

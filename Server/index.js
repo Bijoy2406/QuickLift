@@ -16,8 +16,8 @@ app.use(cookieParser());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "quicklift" // Add your database name here
+    password: "zinku;sempire08214",
+    database: "quicklift6" // Add your database name here
 });
 
 db.connect((err) => {
