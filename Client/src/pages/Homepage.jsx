@@ -1,7 +1,10 @@
 import React from 'react';
-
+import { useAuth } from '../context/AuthContext';
+import "../styles/homepage.css";
 
 const Homepage = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="homepage">
       {/* Header Section */}
@@ -13,6 +16,7 @@ const Homepage = () => {
             <li><a href="#rides">Rides</a></li>
             <li><a href="#profile">Profile</a></li>
             <li><a href="#help">Help</a></li>
+            
           </ul>
         </nav>
       </header>
@@ -31,17 +35,17 @@ const Homepage = () => {
         <h3>Choose Your Ride</h3>
         <div className="options-grid">
           <div className="option">
-            <img src="economy-icon.png" alt="Economy" />
+            <img src="../../src/assets/economy.png" alt="Economy" /> {/* Updated icon path */}
             <h4>Economy</h4>
             <p>Affordable, everyday rides</p>
           </div>
           <div className="option">
-            <img src="premium-icon.png" alt="Premium" />
+            <img src="../../src/assets/premium.png" alt="Premium" /> {/* Updated icon path */}
             <h4>Premium</h4>
             <p>Luxury rides with top-rated drivers</p>
           </div>
           <div className="option">
-            <img src="shared-icon.png" alt="Shared" />
+            <img src="../../src/assets/shared.png" alt="Shared" /> {/* Updated icon path */}
             <h4>Shared</h4>
             <p>Share your ride and save</p>
           </div>
@@ -61,4 +65,3 @@ const Homepage = () => {
 };
 
 export default Homepage;
-
