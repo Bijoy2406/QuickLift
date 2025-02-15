@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/login.css";
+import"../pages/Homepage"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -17,8 +18,8 @@ function Login() {
       localStorage.setItem("token", response.data.token);
       setSuccessMessage(`Welcome back, ${response.data.user.name}!`);
       setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000); // Redirect after 2 seconds
+        navigate("/homepage");
+      }, 2000); 
     } catch (err) {
       setError(err.response.data.error || "An error occurred");
     }
