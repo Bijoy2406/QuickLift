@@ -64,6 +64,30 @@ app.post('/login', (req, res) => {
   });
 });
 
+
+app.get('/api/profile', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "your_secret_key");
+    const query = "SELECT id, name, email FROM users WHERE email = ?";
+
+    db.query(query, [decoded.email], (err, results) => {
+      if (err || results.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(results[0]);
+    });
+
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
