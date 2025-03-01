@@ -1,0 +1,60 @@
+.ride-page {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .ride-options {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .option {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+    text-align: center;
+  }
+  
+  .option img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .option.selected {
+    border: 2px solid blue;
+    background-color: #f0f8ff;
+  }
+  
+  .book-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .book-btn:hover {
+    background-color: #0056b3;
+  }
+  

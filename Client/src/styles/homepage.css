@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Set height to 100% of the viewport */
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+}
+
+.header {
+    position: relative;
+    color: white;
+    padding: 20px 0; /* Increased padding for better spacing */
+    text-align: center; /* Center the text */
+    width: 100%; /* Make header full width */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 150px; /* Set a fixed height for the header */
+}
+/* Add this to your existing CSS */
+
+.option img {
+    width: 100px; /* Set the desired width */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px; /* Add some space below the image */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5em; /* Increased font size for better visibility */
+    margin-bottom: 10px; /* Add some space below the heading */
+}
+
+.header nav {
+    margin-top: 10px; /* Added margin for spacing */
+}
+
+.header nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Remove default margin */
+}
+
+.header nav ul li {
+    display: inline;
+    margin: 0 15px; /* Increased margin for better spacing between links */
+}
+
+.header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold; /* Made links bold for better visibility */
+    font-size: 1.1em; /* Slightly increase font size for better readability */
+}
+.hero {
+    background-color: #f4f4f4;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.hero h2 {
+    margin: 0;
+}
+
+.hero p {
+    margin: 10px 0;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+.ride-options {
+    padding: 20px;
+    text-align: center;
+}
+
+.options-grid {
+    display: flex;
+    justify-content: space-around;
+}
+
+.option {
+    text-align: center;
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.footer ul li a {
+    color: white;
+    text-decoration: none;
+}
