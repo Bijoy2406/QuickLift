@@ -25,26 +25,9 @@ db.connect((err) => {
     }
 });
 
-// Middleware for authentication
-const authenticateToken = (req, res, next) => {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    jwt.verify(token, "your_secret_key", (err, decoded) => {
-        if (err) {
-            return res.status(403).json({ error: 'Invalid token' });
-        }
-        req.user = decoded;
-        next();
-    });
-};
-
-// Register User
 app.post('/api/register', async (req, res) => {
     const { name, email, password, role, car_number, car_details } = req.body;
+
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -58,8 +41,9 @@ app.post('/api/register', async (req, res) => {
             return res.status(500).json({ error: 'Database error' });
         }
 
+    
         if (role === 'rider') {
-            const userId = result.insertId;
+            const userId = result.insertId; // Get the ID of the newly created user
             const riderSql = "INSERT INTO riders (user_id, car_number, car_details) VALUES (?, ?, ?)";
             const riderValues = [userId, car_number, car_details];
 
@@ -71,21 +55,23 @@ app.post('/api/register', async (req, res) => {
             });
         }
 
+        
         const token = jwt.sign({ email }, "your_secret_key", { expiresIn: '1h' });
 
+    
         db.query("SELECT * FROM users WHERE email = ?", [email], (err, userResult) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: 'Database error' });
             }
 
-            console.log("User registered successfully:", userResult);
+            console.log("User registered successfully:", userResult); // Log the user data
             res.status(201).json({ message: "User registered successfully", token });
         });
     });
 });
 
-// Login User
+
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -107,60 +93,60 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
+        
         const token = jwt.sign({ email }, "your_secret_key", { expiresIn: '1h' });
 
         res.status(200).json({ message: "Login successful", token, user });
     });
 });
-
-// ✏️ Update user profile
-app.put('/api/profile', authenticateToken, async (req, res) => {
-    const { name, password, role, car_number, car_details } = req.body;
-    const email = req.user.email;
-
-    console.log("🔄 Updating profile for:", email);
-    console.log("Received data:", req.body);
-
-    let updateUserSQL = "UPDATE users SET name = ? WHERE email = ?";
-    let values = [name, email];
-
-    if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        updateUserSQL = "UPDATE users SET name = ?, password = ? WHERE email = ?";
-        values = [name, hashedPassword, email];
+// Add this endpoint to your existing code
+app.get('/api/profile', (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    db.query(updateUserSQL, values, (err, result) => {
+    jwt.verify(token, "your_secret_key", (err, decoded) => {
         if (err) {
-            console.error("❌ Error updating user:", err);
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(403).json({ error: 'Invalid token' });
         }
 
-        if (role === 'rider') {
-            db.query("SELECT id FROM users WHERE email = ?", [email], (err, userResult) => {
-                if (err || userResult.length === 0) {
-                    console.error("❌ Error fetching user ID:", err);
-                    return res.status(500).json({ error: 'User retrieval failed' });
-                }
+        const sql = "SELECT * FROM users WHERE email = ?";
+        db.query(sql, [decoded.email], (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Database error' });
+            }
 
-                const userId = userResult[0].id;
-                const updateRiderSQL = "UPDATE riders SET car_number = ?, car_details = ? WHERE user_id = ?";
-                db.query(updateRiderSQL, [car_number, car_details, userId], (err) => {
+            if (result.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const user = result[0];
+
+            // If the user is a rider, fetch additional rider information
+            if (user.role === 'rider') {
+                const riderSql = "SELECT * FROM riders WHERE user_id = ?";
+                db.query(riderSql, [user.id], (err, riderResult) => {
                     if (err) {
-                        console.error("❌ Error updating rider details:", err);
-                        return res.status(500).json({ error: 'Error updating rider details' });
+                        console.error(err);
+                        return res.status(500).json({ error: 'Database error' });
                     }
-                    console.log("✅ Rider profile updated successfully!");
-                    res.json({ message: "Profile updated successfully" });
+
+                    // Combine user and rider information
+                    const riderInfo = riderResult.length > 0 ? riderResult[0] : {};
+                    res.json({ ...user, ...riderInfo }); // Return combined user and rider data
                 });
-            });
-        } else {
-            console.log("✅ User profile updated successfully!");
-            res.json({ message: "Profile updated successfully" });
-        }
+            } else {
+                res.json(user); // Return user data for non-riders
+            }
+        });
     });
 });
 
+
+
 app.listen(8000, () => {
-    console.log("🚀 Server running on port 8000");
+    console.log("Server running on port 8000");
 });
