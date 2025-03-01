@@ -17,26 +17,7 @@ const Homepage = () => {
         </div>
       </section>
 
-      <section className="ride-options">
-        <h3>Choose Your Ride</h3>
-        <div className="options-grid">
-          <div className="option">
-            <img src="../../src/assets/economy.png" alt="Economy" />
-            <h4>Economy</h4>
-            <p>Affordable, everyday rides</p>
-          </div>
-          <div className="option">
-            <img src="../../src/assets/premium.png" alt="Premium" />
-            <h4>Premium</h4>
-            <p>Luxury rides with top-rated drivers</p>
-          </div>
-          <div className="option">
-            <img src="../../src/assets/shared.png" alt="Shared" />
-            <h4>Shared</h4>
-            <p>Share your ride and save</p>
-          </div>
-        </div>
-      </section>
+
 
       <footer className="footer">
         <p>&copy; 2023 QuickLift. All rights reserved.</p>
