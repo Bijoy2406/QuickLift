@@ -4,6 +4,18 @@ import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
 import "../styles/profile.css";
 
+const updateProfile = async (updatedData, token) => {
+  try {
+    const response = await axios.put("http://localhost:8000/api/profile", updatedData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Profile update failed:", error.response?.data);
+    throw error.response?.data || "Error updating profile";
+  }
+};
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -50,15 +62,11 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-
-      await axios.put("http://localhost:8000/api/profile", updatedUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await updateProfile(updatedUser, token);
       setUser(updatedUser); // Update UI with new data
       setIsEditing(false);
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to update profile");
+      setError(err.error || "Failed to update profile");
     }
   };
 
