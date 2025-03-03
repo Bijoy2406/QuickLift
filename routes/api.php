@@ -1,18 +1,21 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-require_once "../controllers/AuthController.php";
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RideController;
 
-$auth = new AuthController();
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if ($_GET["action"] === "register") {
-        $auth->register();
-    } elseif ($_GET["action"] === "login") {
-        $auth->login();
-    }
-}
-?>
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('/ride-request', [RideController::class, 'createRideRequest']);
+    Route::post('/assign-ride', [RideController::class, 'assignRide']);
+});

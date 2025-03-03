@@ -1,61 +1,64 @@
 <?php
-class User {
-    private $conn;
-    private $table = "users";
 
-    public function __construct($db) {
-        $this->conn = $db;
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Model
+{
+    use HasFactory, HasApiTokens;
+
+    // Table name
+    protected $table = 'users';
+
+    // Primary key
+    protected $primaryKey = "user_id";
+
+    // Disable auto-incrementing for the primary key
+    public $incrementing = false;
+
+    // Primary key type
+    protected $keyType = "bigInteger";
+
+    // Fields that can be mass-assigned
+    protected $fillable = [
+        'user_id',
+        'name',
+        'email',
+        'password',
+        'role', // 'user' or 'rider'
+    ];
+
+    // Fields to hide in responses
+    protected $hidden = [
+        'password',
+    ];
+
+    // Relationship with the Rider model (if the user is a rider)
+    public function rider()
+    {
+        return $this->hasOne(Rider::class, 'user_id', 'user_id');
     }
 
-    public function register($name, $email, $password, $role, $car_number = null, $car_details = null, $preferred_location = null) {
-        if ($this->emailExists($email)) {
-            return ["status" => false, "message" => "Email already registered."];
-        }
-
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $query = "INSERT INTO " . $this->table . " (name, email, password, role, car_number, car_details, preferred_location) 
-                  VALUES (:name, :email, :password, :role, :car_number, :car_details, :preferred_location)";
-        
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":name", $name);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":password", $hashed_password);
-        $stmt->bindParam(":role", $role);
-        $stmt->bindParam(":car_number", $car_number);
-        $stmt->bindParam(":car_details", $car_details);
-        $stmt->bindParam(":preferred_location", $preferred_location);
-
-        if ($stmt->execute()) {
-            return ["status" => true, "message" => "User registered successfully."];
-        } else {
-            return ["status" => false, "message" => "Failed to register user."];
-        }
+    // Relationship with the RideRequest model (if the user is a passenger)
+    public function rideRequests()
+    {
+        return $this->hasMany(RideRequest::class, 'user_id', 'user_id');
     }
 
-    public function login($email, $password) {
-        $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
-        $stmt->execute();
-        
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($password, $user["password"])) {
-                return ["status" => true, "user" => $user];
-            } else {
-                return ["status" => false, "message" => "Invalid password."];
-            }
-        } else {
-            return ["status" => false, "message" => "User not found."];
-        }
-    }
+    // Automatically generate a unique user_id before creating a new user
+    protected static function boot()
+    {
+        parent::boot();
 
-    private function emailExists($email) {
-        $query = "SELECT id FROM " . $this->table . " WHERE email = :email";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
+        static::creating(function ($user) {
+            do {
+                $randomId = mt_rand(1000000000, 9999999999); // Generate 10-digit random ID
+            } while (self::where("user_id", $randomId)->exists()); // Ensure uniqueness
+
+            $user->user_id = $randomId; // Assign random ID
+        });
     }
 }
-?>

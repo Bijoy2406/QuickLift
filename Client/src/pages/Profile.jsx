@@ -85,14 +85,47 @@ const Profile = () => {
 
           {isEditing ? (
             <>
-              <input type="text" name="name" value={updatedUser.name} onChange={handleChange} />
-              <input type="text" name="preferred_location" value={updatedUser.preferred_location || ""} onChange={handleChange} />
+              {/* Editable Name Section */}
+              <div className="edit-field">
+                <h3>Name</h3>
+                <input type="text" name="name" value={updatedUser.name} onChange={handleChange} />
+              </div>
+
+              {/* Editable Email Section */}
+              <div className="edit-field">
+                <h3>Email</h3>
+                <input type="email" name="email" value={updatedUser.email} onChange={handleChange} />
+              </div>
+
+              {/* Editable Password Section */}
+              <div className="edit-field">
+                <h3>Password</h3>
+                <input type="password" name="password" value={updatedUser.password || ""} onChange={handleChange} />
+                <small>Leave blank to keep current password</small>
+              </div>
+
+              {/* Role-specific sections */}
+              {user.role === 'user' && (
+                <div className="edit-field">
+                  <h3>Preferred Location</h3>
+                  <input type="text" name="preferred_location" value={updatedUser.preferred_location || ""} onChange={handleChange} />
+                </div>
+              )}
+
               {user.role === 'rider' && (
                 <>
-                  <input type="text" name="car_number" value={updatedUser.car_number || ""} onChange={handleChange} />
-                  <input type="text" name="car_details" value={updatedUser.car_details || ""} onChange={handleChange} />
+                  <div className="edit-field">
+                    <h3>Car Number</h3>
+                    <input type="text" name="car_number" value={updatedUser.car_number || ""} onChange={handleChange} />
+                  </div>
+
+                  <div className="edit-field">
+                    <h3>Car Details</h3>
+                    <input type="text" name="car_details" value={updatedUser.car_details || ""} onChange={handleChange} />
+                  </div>
                 </>
               )}
+
               <button onClick={handleSave} className="save-button">Save</button>
               <button onClick={() => setIsEditing(false)} className="cancel-button">Cancel</button>
             </>
