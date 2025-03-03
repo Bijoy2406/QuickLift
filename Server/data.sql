@@ -1,5 +1,3 @@
-
-CREATE DATABASE quicklift;
 USE quicklift;
 
 -- Users Table
@@ -7,7 +5,7 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,  -- Ensure this stores hashed passwords
     role ENUM('user', 'rider') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -18,23 +16,25 @@ CREATE TABLE riders (
     user_id INT NOT NULL UNIQUE,
     car_number VARCHAR(50) NOT NULL,
     car_details TEXT NOT NULL,
-    availability ENUM('Available', 'Unavailable') DEFAULT 'Available',
+    availability ENUM('Available', 'Unavailable', 'Busy', 'Offline') DEFAULT 'Available',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-SELECT * FROM riders;
-select * from users;
--- Ride Requests Table (For Users Requesting Rides)
+
+-- Ride Requests Table
 CREATE TABLE ride_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     pickup_location TEXT NOT NULL,
     dropoff_location TEXT NOT NULL,
+    pickup_coords POINT NOT NULL,
+    dropoff_coords POINT NOT NULL,
     status ENUM('Pending', 'Accepted', 'Completed', 'Cancelled') DEFAULT 'Pending',
+    fare DECIMAL(8,2) AFTER status,
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Ride Assignments Table (For Assigning Riders to Requests)
+-- Ride Assignments Table
 CREATE TABLE ride_assignments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     request_id INT NOT NULL,
@@ -45,14 +45,34 @@ CREATE TABLE ride_assignments (
     FOREIGN KEY (rider_id) REFERENCES riders(id) ON DELETE CASCADE
 );
 
--- View to show rider details along with user information
+-- Driver Locations Table
+CREATE TABLE driver_locations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rider_id INT NOT NULL,
+    coordinates POINT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (rider_id) REFERENCES riders(id)
+);
+
+-- User Sessions Table (for login/logout tracking)
+CREATE TABLE user_sessions (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    logout_time TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Create Index for Faster Queries on user_sessions
+CREATE INDEX idx_user_sessions_user_id ON user_sessions(user_id);
+
+-- Rider Details View
 CREATE VIEW rider_details AS
 SELECT 
     r.id AS rider_id,
     u.name AS rider_name,
     u.email AS rider_email,
     u.role AS rider_role,
-    u.password AS rider_password,
     r.car_number,
     r.car_details,
     r.availability
@@ -61,5 +81,50 @@ FROM
 JOIN 
     users u ON r.user_id = u.id;
 
--- View all tables
+-- Sample Users (hashed passwords)
+-- You should hash these passwords before insertion or in code
+INSERT INTO users (name, email, password, role) VALUES 
+('John Doe', 'john@example.com', 'hashed_password1', 'user'),
+('Jane Smith', 'jane@example.com', 'hashed_password2', 'rider');
+
+-- Sample Riders
+INSERT INTO riders (user_id, car_number, car_details) VALUES 
+(1, 'ABC123', 'Toyota Camry, 2020'),
+(2, 'XYZ789', 'Honda Accord, 2019');
+
+-- Sample User Sessions
+INSERT INTO user_sessions (user_id, login_time) VALUES
+(1, NOW()),
+(2, NOW());
+
+-- View Logged-in Users
+SELECT u.id, u.name, u.email, s.login_time
+FROM user_sessions s
+JOIN users u ON s.user_id = u.id
+WHERE s.logout_time IS NULL;
+
+-- View Logged-out Users
+SELECT u.id, u.name, u.email, s.login_time, s.logout_time
+FROM user_sessions s
+JOIN users u ON s.user_id = u.id
+WHERE s.logout_time IS NOT NULL;
+
+-- Query for Active Ride Assignments of a Rider
+SELECT DISTINCT r.* 
+FROM ride_requests r
+INNER JOIN ride_assignments ra ON r.id = ra.request_id
+INNER JOIN riders ri ON ra.rider_id = ri.id
+WHERE ri.user_id = 24 
+AND r.status = 'Accepted'
+AND ra.status = 'In Progress';
+
+-- View All Tables
 SHOW TABLES;
+
+-- View Table Data
+SELECT * FROM users;
+SELECT * FROM riders;
+SELECT * FROM ride_requests;
+SELECT * FROM ride_assignments;
+SELECT * FROM user_sessions;
+SELECT * FROM rider_details;
