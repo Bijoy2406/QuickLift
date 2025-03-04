@@ -1,4 +1,9 @@
+-- Use the QuickLift database
 USE quicklift;
+
+-- ================================
+-- Table Definitions
+-- ================================
 
 -- Users Table
 CREATE TABLE users (
@@ -63,8 +68,12 @@ CREATE TABLE user_sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create Index for Faster Queries on user_sessions
+-- Index for Faster Queries
 CREATE INDEX idx_user_sessions_user_id ON user_sessions(user_id);
+
+-- ================================
+-- Views for Quick Data Retrieval
+-- ================================
 
 -- Rider Details View
 CREATE VIEW rider_details AS
@@ -81,8 +90,25 @@ FROM
 JOIN 
     users u ON r.user_id = u.id;
 
+-- Ride History View (User Perspective)
+CREATE VIEW ride_history AS
+SELECT 
+    rr.id AS ride_id,
+    u.name AS user_name,
+    u.email AS user_email,
+    rr.pickup_location,
+    rr.dropoff_location,
+    rr.status,
+    rr.fare,
+    rr.requested_at
+FROM ride_requests rr
+JOIN users u ON rr.user_id = u.id;
+
+-- ================================
+-- Sample Data
+-- ================================
+
 -- Sample Users (hashed passwords)
--- You should hash these passwords before insertion or in code
 INSERT INTO users (name, email, password, role) VALUES 
 ('John Doe', 'john@example.com', 'hashed_password1', 'user'),
 ('Jane Smith', 'jane@example.com', 'hashed_password2', 'rider');
@@ -97,6 +123,10 @@ INSERT INTO user_sessions (user_id, login_time) VALUES
 (1, NOW()),
 (2, NOW());
 
+-- ================================
+-- Useful Queries
+-- ================================
+
 -- View Logged-in Users
 SELECT u.id, u.name, u.email, s.login_time
 FROM user_sessions s
@@ -109,22 +139,53 @@ FROM user_sessions s
 JOIN users u ON s.user_id = u.id
 WHERE s.logout_time IS NOT NULL;
 
--- Query for Active Ride Assignments of a Rider
-SELECT DISTINCT r.* 
-FROM ride_requests r
-INNER JOIN ride_assignments ra ON r.id = ra.request_id
-INNER JOIN riders ri ON ra.rider_id = ri.id
-WHERE ri.user_id = 24 
-AND r.status = 'Accepted'
-AND ra.status = 'In Progress';
+-- Get All Active Rides with User & Rider Details
+SELECT 
+    rr.id AS ride_id, 
+    u.name AS user_name, 
+    u.email AS user_email, 
+    r.name AS rider_name,
+    rr.pickup_location, 
+    rr.dropoff_location, 
+    ra.status, 
+    rr.fare, 
+    rr.requested_at
+FROM ride_requests rr
+JOIN users u ON rr.user_id = u.id
+JOIN ride_assignments ra ON rr.id = ra.request_id
+JOIN riders ri ON ra.rider_id = ri.id
+JOIN users r ON ri.user_id = r.id
+WHERE ra.status = 'In Progress';
 
--- View All Tables
+-- Get All Available Riders
+SELECT u.id AS rider_id, u.name AS rider_name, r.car_number, r.car_details, r.availability
+FROM users u
+JOIN riders r ON u.id = r.user_id
+WHERE r.availability = 'Available';
+
+-- Get Ride Requests for a Specific User
+SELECT * FROM ride_requests WHERE user_id = 1;
+
+-- Get Ride Assignments for a Specific Rider
+SELECT 
+    ra.id AS assignment_id, 
+    rr.pickup_location, 
+    rr.dropoff_location, 
+    rr.fare, 
+    ra.status, 
+    ra.assigned_at
+FROM ride_assignments ra
+JOIN ride_requests rr ON ra.request_id = rr.id
+WHERE ra.rider_id = 2;
+
+-- ================================
+-- Show Table Data
+-- ================================
 SHOW TABLES;
-
--- View Table Data
 SELECT * FROM users;
 SELECT * FROM riders;
 SELECT * FROM ride_requests;
 SELECT * FROM ride_assignments;
 SELECT * FROM user_sessions;
 SELECT * FROM rider_details;
+SELECT * FROM ride_history;
