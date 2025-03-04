@@ -10,17 +10,33 @@ const Help = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/profile", {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        })
-        .then(response => {
-            setUser(response.data);
-        })
-        .catch(error => {
-            console.error("❌ Failed to fetch profile:", error);
-            alert("Please log in first!");
-            navigate("/login");
-        });
+        const fetchProfile = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Please log in first!");
+                    navigate("/login");
+                    return;
+                }
+
+                const response = await axios.get("http://localhost:8000/api/profile", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (response.data) {
+                    setUser(response.data);
+                } else {
+                    alert("Failed to fetch profile. Please log in again.");
+                    navigate("/login");
+                }
+            } catch (error) {
+                console.error("❌ Failed to fetch profile:", error);
+                alert("Please log in first!");
+                navigate("/login");
+            }
+        };
+
+        fetchProfile();
     }, [navigate]);
 
     const toggleDropdown = (index) => {

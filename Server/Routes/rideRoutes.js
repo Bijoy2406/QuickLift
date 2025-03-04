@@ -1,4 +1,3 @@
-// routes/rideRoutes.js
 import express from 'express';
 import db from '../db.js';
 
@@ -7,19 +6,31 @@ const router = express.Router();
 // Create Ride Request
 router.post('/ride-request', (req, res) => {
   const { pickup_location, dropoff_location } = req.body;
-  const user_id = req.user.user_id;
+  const token = req.headers.authorization?.split(' ')[1];
 
-  const sql = "INSERT INTO ride_requests (user_id, pickup_location, dropoff_location) VALUES (?, ?, ?)";
-  const values = [user_id, pickup_location, dropoff_location];
+  if (!token) {
+    return res.status(401).json({ error: 'Token required' });
+  }
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Error creating ride request' });
-    }
+  try {
+    const decoded = jwt.verify(token, "your_secret_key");
+    const userId = decoded.userId;
 
-    res.status(201).json({ message: "Ride request created successfully", requestId: result.insertId });
-  });
+    const sql = "INSERT INTO ride_requests (user_id, pickup_location, dropoff_location) VALUES (?, ?, ?)";
+    const values = [userId, pickup_location, dropoff_location];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Error creating ride request' });
+      }
+
+      res.status(201).json({ message: "Ride request created successfully", requestId: result.insertId });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
 });
 
 // Assign Rider to Ride Request

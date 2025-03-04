@@ -21,6 +21,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedUser, setUpdatedUser] = useState({});
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Loading state for editing
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,9 +37,18 @@ const Profile = () => {
         const response = await axios.get("http://localhost:8000/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(response.data);
-        setUpdatedUser(response.data); // Set initial values for editing
+
+        console.log("Fetched user data:", response.data); // Debugging: Log fetched data
+
+        // Ensure the response data is in the correct format
+        if (response.data && response.data.user) {
+          setUser(response.data.user);
+          setUpdatedUser(response.data.user); // Set initial values for editing
+        } else {
+          setError("Invalid profile data format");
+        }
       } catch (err) {
+        console.error("Error fetching profile:", err);
         setError(err.response?.data?.error || "Failed to fetch profile");
       }
     };
@@ -60,13 +70,18 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
+    setIsLoading(true); // Start loading
     try {
       const token = localStorage.getItem("token");
-      await updateProfile(updatedUser, token);
-      setUser(updatedUser); // Update UI with new data
+      const updatedProfile = await updateProfile(updatedUser, token);
+
+      // Update UI with new data
+      setUser(updatedProfile.user); // Ensure this matches the backend response structure
       setIsEditing(false);
     } catch (err) {
       setError(err.error || "Failed to update profile");
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -88,13 +103,13 @@ const Profile = () => {
               {/* Editable Name Section */}
               <div className="edit-field">
                 <h3>Name</h3>
-                <input type="text" name="name" value={updatedUser.name} onChange={handleChange} />
+                <input type="text" name="name" value={updatedUser.name || ""} onChange={handleChange} />
               </div>
 
               {/* Editable Email Section */}
               <div className="edit-field">
                 <h3>Email</h3>
-                <input type="email" name="email" value={updatedUser.email} onChange={handleChange} />
+                <input type="email" name="email" value={updatedUser.email || ""} onChange={handleChange} />
               </div>
 
               {/* Editable Password Section */}
@@ -104,14 +119,7 @@ const Profile = () => {
                 <small>Leave blank to keep current password</small>
               </div>
 
-              {/* Role-specific sections */}
-              {user.role === 'user' && (
-                <div className="edit-field">
-                  <h3>Preferred Location</h3>
-                  <input type="text" name="preferred_location" value={updatedUser.preferred_location || ""} onChange={handleChange} />
-                </div>
-              )}
-
+              {/* Role-specific Fields */}
               {user.role === 'rider' && (
                 <>
                   <div className="edit-field">
@@ -126,25 +134,50 @@ const Profile = () => {
                 </>
               )}
 
-              <button onClick={handleSave} className="save-button">Save</button>
-              <button onClick={() => setIsEditing(false)} className="cancel-button">Cancel</button>
+              <button onClick={handleSave} disabled={isLoading}>
+                {isLoading ? "Saving..." : "Save Changes"}
+              </button>
+              <button onClick={() => setIsEditing(false)} disabled={isLoading}>
+                Cancel
+              </button>
             </>
           ) : (
             <>
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Role:</strong> {user.role}</p>
-              <p><strong>Address:</strong> {user.preferred_location || "N/A"}</p>
+              {/* Display User Information */}
+              <div className="field">
+                <h3>Name:</h3>
+                <p>{user.name}</p>
+              </div>
+
+              <div className="field">
+                <h3>Email:</h3>
+                <p>{user.email}</p>
+              </div>
+
+              <div className="field">
+                <h3>Role:</h3>
+                <p>{user.role}</p>
+              </div>
+
+              {/* Display Rider-specific Fields */}
               {user.role === 'rider' && (
                 <>
-                  <p><strong>Car Number:</strong> {user.car_number}</p>
-                  <p><strong>Car Details:</strong> {user.car_details}</p>
+                  <div className="field">
+                    <h3>Car Number:</h3>
+                    <p>{user.car_number}</p>
+                  </div>
+
+                  <div className="field">
+                    <h3>Car Details:</h3>
+                    <p>{user.car_details}</p>
+                  </div>
                 </>
               )}
-              <button onClick={handleEdit} className="edit-button">Edit</button>
-              <button onClick={handleLogout} className="logout-button">Logout</button>
+
+              <button onClick={handleEdit}>Edit Profile</button>
             </>
           )}
+          <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
         <p>Loading profile...</p>
