@@ -13,33 +13,21 @@ class Rider extends Model
     protected $table = 'riders';
 
     // Primary key
-    protected $primaryKey = "rider_id";
+    protected $primaryKey = 'id'; // Use the default auto-incrementing 'id' column
 
-    // Disable auto-incrementing for the primary key
-    public $incrementing = false;
-
-    // Primary key type
-    protected $keyType = "bigInteger";
-
-    // Fields that can be mass-assigned
+    // Foreign key for user
     protected $fillable = [
-        'rider_id',
         'user_id',
         'car_number',
         'car_details',
         'availability', // 'Available' or 'Unavailable'
+        'rider_id', // Add the 'rider_id' field to fillable
     ];
 
     // Relationship with the User model
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
-    }
-
-    // Relationship with the RideAssignment model
-    public function rideAssignments()
-    {
-        return $this->hasMany(RideAssignment::class, 'rider_id', 'rider_id');
+        return $this->belongsTo(User::class, 'user_id', 'id'); // Correct foreign key usage
     }
 
     // Automatically generate a unique rider_id before creating a new rider
@@ -52,7 +40,8 @@ class Rider extends Model
                 $randomId = mt_rand(1000000000, 9999999999); // Generate 10-digit random ID
             } while (self::where("rider_id", $randomId)->exists()); // Ensure uniqueness
 
-            $rider->rider_id = $randomId; // Assign random ID
+            // Assign rider_id to the rider instance
+            $rider->rider_id = $randomId;
         });
     }
 }

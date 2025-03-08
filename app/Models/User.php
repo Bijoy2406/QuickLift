@@ -43,22 +43,4 @@ class User extends Model
     }
 
     // Relationship with the RideRequest model (if the user is a passenger)
-    public function rideRequests()
-    {
-        return $this->hasMany(RideRequest::class, 'user_id', 'user_id');
-    }
-
-    // Automatically generate a unique user_id before creating a new user
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($user) {
-            do {
-                $randomId = mt_rand(1000000000, 9999999999); // Generate 10-digit random ID
-            } while (self::where("user_id", $randomId)->exists()); // Ensure uniqueness
-
-            $user->user_id = $randomId; // Assign random ID
-        });
-    }
 }

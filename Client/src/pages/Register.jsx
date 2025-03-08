@@ -8,7 +8,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
-    password_confirm: "",
+    password_confirmation: "",
     role: "user",
     car_number: "",
     car_details: "",
@@ -24,7 +24,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/api/register", formData);
+      const response = await axios.post("http://127.0.0.1:8000/api/register", formData);
+      localStorage.setItem("token", response.data.token);
+    
+      localStorage.setItem('userId', response.data.user.id);
+      localStorage.setItem('userRole', response.data.user.role);
       navigate("/login");
     } catch (err) {
       if (err.response) {
@@ -35,7 +39,8 @@ function Register() {
         setError("An error occurred. Please try again.");
       }
     }
-  };
+};
+
 
   return (
     <div className="main-content">
@@ -53,7 +58,7 @@ function Register() {
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
           
           <label>Confirm Password</label>
-          <input type="password" name="password_confirm" value={formData.password_confirm} onChange={handleChange} required />
+          <input type="password" name="password_confirmation" value={formData.password_confirmation} onChange={handleChange} required />
           
           <label>Register as</label>
           <select name="role" value={formData.role} onChange={handleChange}>

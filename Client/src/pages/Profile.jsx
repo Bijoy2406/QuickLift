@@ -41,9 +41,9 @@ const Profile = () => {
         console.log("Fetched user data:", response.data); // Debugging: Log fetched data
 
         // Ensure the response data is in the correct format
-        if (response.data && response.data.user) {
-          setUser(response.data.user);
-          setUpdatedUser(response.data.user); // Set initial values for editing
+        if (response.data) {
+          setUser(response.data);
+          setUpdatedUser(response.data);
         } else {
           setError("Invalid profile data format");
         }
