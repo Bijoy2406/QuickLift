@@ -1,0 +1,130 @@
+.rider-dashboard {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  
+  .rider-dashboard h2 {
+    color: #ffffff;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .ride-requests {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .ride-request-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .ride-request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .ride-request-card p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .ride-request-card button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .ride-request-card button:hover {
+    background: #45a049;
+  }
+  
+  @media (max-width: 768px) {
+    .ride-requests {
+      grid-template-columns: 1fr;
+    }
+    
+    .rider-dashboard {
+      margin: 20px;
+    }
+  }
+  .accepted-rides {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 20px;
+    margin-top: 30px;
+    background: #f8f9fa;
+    border-radius: 12px;
+  }
+  
+  .accepted-rides .ride-request-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border-left: 4px solid #4CAF50;
+  }
+  
+  .accepted-rides .ride-request-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .accepted-rides h2 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .accepted-rides p {
+    margin: 12px 0;
+    font-size: 16px;
+    color: #34495e;
+    line-height: 1.5;
+  }
+  
+  .accepted-rides .status {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-top: 10px;
+  }
+  
+  .accepted-rides button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .accepted-rides button:hover {
+    background: #1976D2;
+  }
+  
